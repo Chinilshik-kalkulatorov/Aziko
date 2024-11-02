@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Docker Service Management</title>
+</head>
+<body>
+    <header>
+        <h1>Docker Service Management</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'dashboard' %}">Главная</a></li>
+                <li><a href="{% url 'create_service' %}">Создать Сервис</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

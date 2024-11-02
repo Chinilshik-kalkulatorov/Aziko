@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Мои Сервисы</h2>
+    <div class="services-list">
+        {% if services %}
+            <ul>
+                {% for service in services %}
+                    <li>
+                        <strong>{{ service.service_name }}</strong> - {{ service.subdomain }}
+                        <div>
+                            <a href="{% url 'stop_service' service.id %}" class="btn">Остановить</a>
+                            <a href="{% url 'remove_service' service.id %}" class="btn">Удалить</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>У вас пока нет запущенных сервисов.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
