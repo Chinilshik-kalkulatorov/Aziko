@@ -1,64 +1,37 @@
-import docker
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import ServiceForm
-from .models import Service
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from .models import User, Username
+from .serializers import UserSerializer
+import re 
 
-# Инициализация клиента Docker
-docker_client = docker.from_env()
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-def create_docker_container(service):
-    """
-    Функция для создания Docker контейнера
-    """
-    try:
-        # Проверка, что контейнер с таким именем уже не запущен
-        try:
-            existing_container = docker_client.containers.get(service.subdomain)
-            if existing_container:
-                return False, f"Контейнер с именем '{service.subdomain}' уже существует."
-        except docker.errors.NotFound:
-            pass  # Контейнер не найден, значит, можно продолжать
 
-        # Создание нового контейнера
-        container = docker_client.containers.run(
-            "your_docker_image",  # Замените на ваше имя образа
-            detach=True,
-            name=service.subdomain,
-            environment={"SERVICE_NAME": service.service_name},
-            ports={'80/tcp': None}  # Пример привязки порта, можно изменить при необходимости
-        )
-        service.container_id = container.id
-        service.save()
-        return True, f"Сервис '{service.service_name}' успешно создан на поддомене '{service.subdomain}'."
-    except docker.errors.APIError as e:
-        return False, str(e)
-
-def create_service_view(request):
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
+def server_name(request, username=None):
     if request.method == 'POST':
-        form = ServiceForm(request.POST)
-        if form.is_valid():
-            service = form.save(commit=False)
-            
-            # Проверка уникальности поддомена
-            if Service.objects.filter(subdomain=service.subdomain).exists():
-                messages.error(request, "Поддомен уже используется другим сервисом.")
-                return render(request, 'create_service.html', {'form': form})
+        username = request.data.get('username')
+    elif request.method == 'GET':
+        if not username:
+            username = request.GET.get('username')
 
-            service.user = request.user  # Связать сервис с текущим пользователем
-            success, message = create_docker_container(service)
-            if success:
-                messages.success(request, message)
-                return redirect('dashboard')
-            else:
-                messages.error(request, f"Ошибка при создании контейнера: {message}")
+    if not username:
+        return Response({"error": "Username not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    username = username.lower()  # Преобразуем имя в нижний регистр
+
+    # Проверяем, что имя содержит только латинские буквы
+    if not re.fullmatch(r'[a-zA-Z]+', username):
+        return Response({"error": "Username must contain only Latin letters"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Проверяем существование имени в базе данных
+    if Username.objects.filter(name=username).exists():
+        return Response({"username": username}, status=status.HTTP_200_OK)
     else:
-        form = ServiceForm()
-
-    return render(request, 'create_service.html', {'form': form})
-
-@login_required
-def dashboard(request):
-    services = Service.objects.filter(user=request.user)  # Показываем только сервисы текущего пользователя
-    return render(request, 'dashboard.html', {'services': services})
+        return Response({"error": "No such name"}, status=status.HTTP_400_BAD_REQUEST)

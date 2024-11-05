@@ -1,0 +1,4 @@
+django==3.2  # Укажите вашу версию Django, если другая
+djangorestframework==3.12.4
+docker==5.0.0
+six
