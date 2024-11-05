@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Верификация номера телефона</title>
+</head>
+<body>
+    <h1>Верификация номера телефона</h1>
+    <form id="verificationForm">
+        <label for="phone_number">Номер телефона:</label><br>
+        <input type="text" id="phone_number" name="phone_number"><br>
+        <label for="verification_code">Код подтверждения:</label><br>
+        <input type="text" id="verification_code" name="verification_code"><br><br>
+        <input type="button" value="Подтвердить" onclick="verifyPhone()">
+    </form>
+
+    <script>
+        function verifyPhone() {
+            const phone_number = document.getElementById('phone_number').value;
+            const verification_code = document.getElementById('verification_code').value;
+
+            fetch('/api/verify_phone/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phone_number: phone_number, verification_code: verification_code }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || data.error);
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+            });
+        }
+    </script>
+</body>
+</html>

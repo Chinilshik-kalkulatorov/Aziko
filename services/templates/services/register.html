@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация пользователя</title>
+</head>
+<body>
+    <h1>Регистрация пользователя</h1>
+    <form id="registrationForm">
+        <label for="name">Имя:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="phone_number">Номер телефона:</label><br>
+        <input type="text" id="phone_number" name="phone_number"><br><br>
+        <input type="button" value="Зарегистрироваться" onclick="registerUser()">
+    </form>
+
+    <script>
+        function registerUser() {
+            const name = document.getElementById('name').value;
+            const phone_number = document.getElementById('phone_number').value;
+
+            fetch('/api/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, phone_number: phone_number }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || data.error);
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+            });
+        }
+    </script>
+</body>
+</html>

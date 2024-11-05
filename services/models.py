@@ -26,3 +26,11 @@ class Username(models.Model):
     def __str__(self):
         return self.name
 
+class UserProfile(models.Model):
+    name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15, unique=True)
+    is_verified = models.BooleanField(default=False)
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.phone_number})"
