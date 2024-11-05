@@ -126,7 +126,7 @@ python manage.py runserver
   **Пример запроса:**
 
   ```bash
-  curl -X GET "http://127.0.0.1:8000/api/service_name/JohnDoe/"
+  curl -X GET "http://127.0.0.1:8000/api/service_name/Aki/"
   ```
 
   **Пример ответа:**
