@@ -48,7 +48,7 @@
 1. **Клонируйте репозиторий:**
 
    ```bash
-   git clone https://github.com/yourusername/yourproject.git
+   git clone https://github.com/Chinilshik-kalkulatorov/Aziko.git
    cd yourproject
    ```
 
@@ -119,20 +119,20 @@ python manage.py runserver
 
 #### 1. Валидация имени пользователя
 
-- **GET** `/api/validate_username/<str:username>/`
+- **GET** `/api/service_name/<str:username>/`
 
   **Описание**: Проверяет, содержит ли имя только латинские буквы, преобразует в нижний регистр и проверяет наличие в базе данных.
 
   **Пример запроса:**
 
   ```bash
-  curl -X GET "http://127.0.0.1:8000/api/validate_username/JohnDoe/"
+  curl -X GET "http://127.0.0.1:8000/api/service_name/JohnDoe/"
   ```
 
   **Пример ответа:**
 
   ```json
-  {"username": "johndoe"}
+  {"username": "Aki"}
   ```
 
 #### 2. Регистрация пользователя
@@ -145,7 +145,7 @@ python manage.py runserver
 
   ```json
   {
-    "name": "John Doe",
+    "name": "Aki",
     "phone_number": "+1234567890"
   }
   ```
@@ -155,7 +155,7 @@ python manage.py runserver
   ```bash
   curl -X POST "http://127.0.0.1:8000/api/register/" \
        -H "Content-Type: application/json" \
-       -d '{"name": "John Doe", "phone_number": "+1234567890"}'
+       -d '{"name": "Aki", "phone_number": "+1234567890"}'
   ```
 
   **Пример ответа:**
@@ -327,26 +327,3 @@ django-extensions
   ```bash
   python manage.py show_urls
   ```
-
-## Вклад в проект
-
-Если вы хотите внести свой вклад в проект:
-
-1. Сделайте форк репозитория.
-2. Создайте новую ветку для вашей функции (`git checkout -b feature/AmazingFeature`).
-3. Сделайте коммит ваших изменений (`git commit -m 'Add some AmazingFeature'`).
-4. Запушьте в ветку (`git push origin feature/AmazingFeature`).
-5. Откройте Pull Request.
-
-## Лицензия
-
-Этот проект лицензирован под лицензией MIT — подробности см. в файле [LICENSE](LICENSE).
-
-## Контакты
-
-- **Email**: your.email@example.com
-- **GitHub**: [yourusername](https://github.com/yourusername)
-
----
-
-**Примечание**: Не забудьте заменить заполнители (например, `your.email@example.com`, `yourusername`) на ваши реальные данные. Также убедитесь, что все инструкции соответствуют вашей текущей конфигурации проекта.
