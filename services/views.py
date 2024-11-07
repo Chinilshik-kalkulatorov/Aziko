@@ -27,9 +27,6 @@ class UserViewSet(viewsets.ModelViewSet):
 def server_name(request, username=None):
     if request.method == 'POST':
         username = request.data.get('username')
-    elif request.method == 'GET':
-        if not username:
-            username = request.GET.get('username')
 
     if not username:
         return Response({"error": "Username not provided"}, status=status.HTTP_400_BAD_REQUEST)

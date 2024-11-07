@@ -8,6 +8,20 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для регистрации пользователя.
+
+    Проверяет корректность введённых данных и создаёт новый профиль пользователя.
+    """
+    name = serializers.CharField(
+        max_length=100,
+        help_text="Имя пользователя (только латинские буквы и пробелы)"
+    )
+    phone_number = serializers.CharField(
+        max_length=15,
+        help_text="Номер телефона в формате '+1234567890'"
+    )
+
     class Meta:
         model = UserProfile
         fields = ['name', 'phone_number']
